@@ -1,0 +1,11 @@
+﻿  main.cpp
+d:\yunwol\work\c++\2048\2048\main.cpp(16): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.14393.0\ucrt\conio.h(452): note: 'getch' 선언을 참조하십시오.
+d:\yunwol\work\c++\2048\2048\main.cpp(28): warning C4996: 'getch': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _getch. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.14393.0\ucrt\conio.h(452): note: 'getch' 선언을 참조하십시오.
+  Game.cpp
+d:\yunwol\work\c++\2048\2048\game.cpp(57): warning C4996: '_sleep': This function or variable has been superceded by newer library or operating system functionality. Consider using Sleep instead. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.14393.0\ucrt\stdlib.h(1271): note: '_sleep' 선언을 참조하십시오.
+  코드를 생성하고 있습니다...
+  2048.vcxproj -> D:\Yunwol\Work\C++\2048\Debug\2048.exe
+  2048.vcxproj -> D:\Yunwol\Work\C++\2048\Debug\2048.pdb (Partial PDB)
