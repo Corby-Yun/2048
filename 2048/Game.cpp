@@ -5,6 +5,9 @@
 #include <cstdlib>
 #include <ctime>
 #include <time.h>
+#include <fstream>
+#include <stdlib.h>
+#include <string>
 
 using namespace std;
 
@@ -15,6 +18,15 @@ Map::~Map(){}
 void Map::init(){
 	score = 0;
 	moveLog = 1;
+	fstream high_score_file_temp;
+	char temp[10] = {0,};
+	high_score_file_temp.open("high.sav");
+	if (!high_score_file_temp.is_open()) {
+		throw "can not open file.\nyou need create file 'high.sav' at path of binary file.";
+	}
+	high_score_file_temp.read(temp,10);
+	high_score = atoi(temp);
+	high_score_file_temp.close();
 	srand((unsigned int)time(NULL));
 	for (int i = 0; i < MAP_SIZE; i++)
 		for (int j = 0; j < MAP_SIZE; j++)
@@ -23,6 +35,7 @@ void Map::init(){
 
 void Map::render() {
 	system("cls");
+	cout << "HIGH SCORE : " << high_score << endl;
 	cout << "SCORE : " << score << endl << endl;
 	for (int i = 0; i < MAP_SIZE; i++) {
 		for (int j = 0; j < MAP_SIZE; j++) {
@@ -75,28 +88,28 @@ void Map::move(int d) {
 			case UP:
 				if (map[ob.x][ob.y] == map[ob.x][ob.y - 1]) {
 					moveLog = 1;
-					score += map[ob.x][ob.y];
+					score_up(map[ob.x][ob.y]);
 					map[ob.x][ob.y - 1] *= 2;
 					map[ob.x][ob.y] = 0;
 				}break;
 			case DOWN:
 				if (map[ob.x][ob.y] == map[ob.x][ob.y + 1]) {
 					moveLog = 1;
-					score += map[ob.x][ob.y];
+					score_up(map[ob.x][ob.y]);
 					map[ob.x][ob.y + 1] *= 2;
 					map[ob.x][ob.y] = 0;
 				}break;
 			case LEFT:
 				if (map[ob.x][ob.y] == map[ob.x - 1][ob.y]) {
 					moveLog = 1;
-					score += map[ob.x][ob.y];
+					score_up(map[ob.x][ob.y]);
 					map[ob.x - 1][ob.y] *= 2;
 					map[ob.x][ob.y] = 0;
 				}break;
 			case RIGHT:
 				if (map[ob.x][ob.y] == map[ob.x + 1][ob.y]) {
 					moveLog = 1;
-					score += map[ob.x][ob.y];
+					score_up(map[ob.x][ob.y]);
 					map[ob.x + 1][ob.y] *= 2;
 					map[ob.x][ob.y] = 0;
 				}break;
@@ -233,5 +246,24 @@ void Map::sortToZero(int d){
 		}
 	break;
 	}
-	//_sleep(400);
+}
+
+void Map::highScoreUpdate()
+{
+	fstream high_score_file_temp;
+	high_score_file_temp.open("high.sav");
+	if (!high_score_file_temp.is_open()) {
+		throw "can not open file.";
+	}
+	string temp = to_string(high_score);
+	high_score_file_temp.write(temp.c_str(),temp.size());
+	high_score_file_temp.close();
+}
+
+void Map::score_up(int num)
+{
+	score += num;
+	if (score > high_score) {
+		high_score = score;
+	}
 }

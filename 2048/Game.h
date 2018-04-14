@@ -16,6 +16,7 @@ struct Pos {
 
 class Map{
 private:
+	int high_score = 0;
 	int score = 0;
 	vector<Pos> list;
 	int map[MAP_SIZE][MAP_SIZE];
@@ -31,5 +32,8 @@ public:
 	void debug();
 	Pos moveToZero(int x,int y,int d);//0쪽으로 이동
 	void sortToZero(int d);//모든수가0이동
+	void highScoreUpdate();
+private:
+	void score_up(int num);
 };
 
