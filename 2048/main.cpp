@@ -29,8 +29,8 @@ int main() {
 					key = getch();
 					if (key == 'r' ||
 						key == 'R') {
-						map.init();
 						map.highScoreUpdate();
+						map.init();
 					}
 					exec = 1;
 					break;
