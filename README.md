@@ -1,17 +1,12 @@
-# 2048
-
-Visual Studio 2017
-
 2048 Game
 
--Key
+# Key
+- W : Up
+- A : Left
+- D : Right
+- S : Down
+- R : Retry
 
- W : Up
- 
- A : Left
- 
- D : Right
- 
- S : Donw
- 
- R : Reset
+# File
+- Game file : 2048.exe
+- Save file : high.sav
