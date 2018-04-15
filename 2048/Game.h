@@ -16,6 +16,24 @@ struct Pos {
 
 class Map{
 private:
+	enum ColorCode{
+		BLACK,   //검정
+		D_BLUE, //어두운 파랑
+		D_GREEN, //어두운 초록
+		D_SKYBLUE, //어두운 하늘
+		D_RED, //어두운 빨강
+		D_VIOLET, //어두운 보라
+		D_YELLOW, //어두운 노랑
+		GRAY, //회색
+		D_GRAY, //어두운 회색
+		BLUE, //파랑
+		GREEN, //초록
+		SKYBLUE, //하늘
+		RED, //빨강
+		VIOLET, //보라
+		YELLOW, //노랑
+		WHITE, //흰색
+	};
 	int high_score = 0;
 	int score = 0;
 	vector<Pos> list;
@@ -35,5 +53,6 @@ public:
 	void highScoreUpdate();
 private:
 	void score_up(int num);
+	void set_color(int Back_Color, int Font_Color);
 };
 

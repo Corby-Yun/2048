@@ -16,11 +16,19 @@ Map::Map() {
 Map::~Map(){}
 
 void Map::init(){
+	TCHAR programpath[_MAX_PATH];
+	CHAR _programpath[_MAX_PATH];
+	GetModuleFileName(NULL, programpath, _MAX_PATH);
+	WideCharToMultiByte(CP_ACP, 0, programpath, _MAX_PATH, _programpath, _MAX_PATH, NULL, NULL);
+	string path = _programpath;
+	for (int i = path.size() - 1; path.at(i) != '\\'; i--) {
+		path.pop_back();
+	}
 	score = 0;
 	moveLog = 1;
 	fstream high_score_file_temp;
 	char temp[10] = {0,};
-	high_score_file_temp.open("high.sav");
+	high_score_file_temp.open(path + "./high.sav");
 	if (!high_score_file_temp.is_open()) {
 		throw "can not open file.\nyou need create file 'high.sav' at path of binary file.";
 	}
@@ -40,17 +48,18 @@ void Map::render() {
 	for (int i = 0; i < MAP_SIZE; i++) {
 		for (int j = 0; j < MAP_SIZE; j++) {
 			switch (map[j][i]) {
-			case 0:SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15); break;
-			case 2:SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 8); break;
-			case 4:SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 6); break;
-			case 8:SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 5); break;
-			case 16:SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 4); break;
-			case 32:SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12); break;
-			case 64:SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 13); break;
-			case 128:SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14); break;
-			case 256:SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 10); break;
-			case 512:SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11); break;
-			default:SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 9);
+			case 0:set_color(WHITE,BLACK); break;
+			case 2:set_color(GRAY, BLACK); break;
+			case 4:set_color(D_YELLOW, BLACK); break;
+			case 8:set_color(GREEN, BLACK); break;
+			case 16:set_color(D_VIOLET, BLACK); break;
+			case 32:set_color(SKYBLUE, BLACK); break;
+			case 64:set_color(RED, BLACK); break;
+			case 128:set_color(BLUE, BLACK); break;
+			case 256:set_color(VIOLET, BLACK); break;
+			case 512:set_color(D_SKYBLUE, BLACK); break;
+			case 1024:set_color(D_BLUE, BLACK); break;
+			case 2048:set_color(D_GREEN, BLACK); break;
 			}
 			printf("%4d", map[j][i]);
 		}
@@ -266,4 +275,9 @@ void Map::score_up(int num)
 	if (score > high_score) {
 		high_score = score;
 	}
+}
+
+void Map::set_color(int Back_Color, int Font_Color){
+	HANDLE Console_Handle = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(Console_Handle, Back_Color * 16 + Font_Color);
 }
