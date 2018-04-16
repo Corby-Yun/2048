@@ -1,47 +1,44 @@
-#include <iostream>
 #include <conio.h>
 #include "Game.h"
+#include <iostream>
 
 using namespace std;
 
 int main() {
 	Map map;
 	try {
-		map.init();
-		map.createBlock();
-		map.render();
+		map.load();
+		map.start();
 		while (1) {
 			static char key;
 			static int exec = 1;
 			do {
 				key = getch();
+				exec = 1;
 				switch (key) {
 				case 'w':
-				case 'W':map.move(UP); exec = 1; break;
+				case 'W':map.move(UP);break;
 				case 's':
-				case 'S':map.move(DOWN); exec = 1; break;
+				case 'S':map.move(DOWN);break;
 				case 'a':
-				case 'A':map.move(LEFT); exec = 1; break;
+				case 'A':map.move(LEFT);break;
 				case 'd':
-				case 'D':map.move(RIGHT); exec = 1; break;
+				case 'D':map.move(RIGHT);break;
 				case 'r':
 				case 'R':cout << "You want RESET GAME? (one more press R)" << endl;
 					key = getch();
 					if (key == 'r' ||
 						key == 'R') {
-						map.highScoreUpdate();
-						map.init();
+						map.save();
+						map.restart();
 					}
-					exec = 1;
 					break;
 				default:
 					exec = 0;
 					break;
 				}
 			} while (exec == 0);
-			map.render();
 			map.createBlock();
-			map.render();
 			//map.debug();
 		}
 	}catch (char* error) {

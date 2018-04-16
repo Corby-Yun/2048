@@ -39,20 +39,28 @@ private:
 	vector<Pos> list;
 	int map[MAP_SIZE][MAP_SIZE];
 	int moveLog=1;
+	string save_file_path;
+	int _game_speed;
 public:
 	Map();
 	~Map();
-	void init();
-	void render();
-	void _setBlock(int x,int y , int num);
+	void start(int _game_speed = 60);
+	void restart();
 	void createBlock();
 	void move(int d);
 	void debug();
+	void load();
+	void save();
+private:
+	void init();
+	void _setBlock(int x,int y , int num);
+	void render();
 	Pos moveToZero(int x,int y,int d);//0쪽으로 이동
 	void sortToZero(int d);//모든수가0이동
-	void highScoreUpdate();
-private:
 	void score_up(int num);
 	void set_color(int Back_Color, int Font_Color);
+	string get_path();
+	fstream file_open();
+	void file_close(fstream& file);
 };
 

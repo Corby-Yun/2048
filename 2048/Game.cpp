@@ -15,26 +15,21 @@ Map::Map() {
 }
 Map::~Map(){}
 
+void Map::start(int _game_speed)
+{
+	init();
+	createBlock();
+}
+
+void Map::restart()
+{
+	save();
+	init();
+}
+
 void Map::init(){
-	TCHAR programpath[_MAX_PATH];
-	CHAR _programpath[_MAX_PATH];
-	GetModuleFileName(NULL, programpath, _MAX_PATH);
-	WideCharToMultiByte(CP_ACP, 0, programpath, _MAX_PATH, _programpath, _MAX_PATH, NULL, NULL);
-	string path = _programpath;
-	for (int i = path.size() - 1; path.at(i) != '\\'; i--) {
-		path.pop_back();
-	}
 	score = 0;
 	moveLog = 1;
-	fstream high_score_file_temp;
-	char temp[10] = {0,};
-	high_score_file_temp.open(path + "./high.sav");
-	if (!high_score_file_temp.is_open()) {
-		throw "can not open file.\nyou need create file 'high.sav' at path of binary file.";
-	}
-	high_score_file_temp.read(temp,10);
-	high_score = atoi(temp);
-	high_score_file_temp.close();
 	srand((unsigned int)time(NULL));
 	for (int i = 0; i < MAP_SIZE; i++)
 		for (int j = 0; j < MAP_SIZE; j++)
@@ -42,6 +37,7 @@ void Map::init(){
 }
 
 void Map::render() {
+	Sleep(_game_speed);
 	system("cls");
 	cout << "HIGH SCORE : " << high_score << endl;
 	cout << "SCORE : " << score << endl << endl;
@@ -76,7 +72,6 @@ void Map::createBlock(){
 	Pos ob;
 	if (moveLog == 0)
 		return;
-	_sleep(250);
 	do {
 		ob.x = rand() % MAP_SIZE;
 		ob.y = rand() % MAP_SIZE;
@@ -86,6 +81,7 @@ void Map::createBlock(){
 		map[ob.x][ob.y] = 2;
 	else
 		map[ob.x][ob.y] = 4;
+	render();
 }
 
 void Map::move(int d) {
@@ -201,6 +197,7 @@ Pos Map::moveToZero(int x, int y, int d){
 		}else {
 			return pos;
 		}
+		render();
 	} while (1);
 	pos.x = x;
 	pos.y = y;
@@ -257,18 +254,6 @@ void Map::sortToZero(int d){
 	}
 }
 
-void Map::highScoreUpdate()
-{
-	fstream high_score_file_temp;
-	high_score_file_temp.open("high.sav");
-	if (!high_score_file_temp.is_open()) {
-		throw "can not open file.";
-	}
-	string temp = to_string(high_score);
-	high_score_file_temp.write(temp.c_str(),temp.size());
-	high_score_file_temp.close();
-}
-
 void Map::score_up(int num)
 {
 	score += num;
@@ -280,4 +265,49 @@ void Map::score_up(int num)
 void Map::set_color(int Back_Color, int Font_Color){
 	HANDLE Console_Handle = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(Console_Handle, Back_Color * 16 + Font_Color);
+}
+
+string Map::get_path(){
+	TCHAR programpath[_MAX_PATH];
+	CHAR _programpath[_MAX_PATH];
+	GetModuleFileName(NULL, programpath, _MAX_PATH);
+	WideCharToMultiByte(CP_ACP, 0, programpath, _MAX_PATH, _programpath, _MAX_PATH, NULL, NULL);
+	string path = _programpath;
+	for (int i = path.size() - 1; path.at(i) != '\\'; i--) {
+		path.pop_back();
+	}
+	return path;
+}
+
+void Map::load()
+{
+	save_file_path = get_path() + "high.sav";
+	fstream high_score_file_temp = file_open();
+	char temp[10] = { 0, };
+	high_score_file_temp.read(temp, 10);
+	high_score = atoi(temp);
+	file_close(high_score_file_temp);
+}
+
+void Map::save(){
+	fstream high_score_file_temp = file_open();
+	string temp = to_string(high_score);
+	high_score_file_temp.write(temp.c_str(), temp.size());
+	file_close(high_score_file_temp);
+}
+
+fstream Map::file_open(){
+	fstream temp;
+	temp.open(save_file_path);
+	if (!temp.is_open()) {
+		throw "can not open file.\nyou need create file 'high.sav' at path of binary file.";
+	}
+	return temp;
+}
+
+void Map::file_close(fstream& file){
+	if (!file.is_open()) {
+		file.close();
+	}
+	file.clear();
 }
